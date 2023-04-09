@@ -2,4 +2,4 @@
 .venv
 
 # CSV files
-/model/data/raw/
+model/data/raw
