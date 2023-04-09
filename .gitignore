@@ -1,0 +1,5 @@
+# Virtual Environment
+.venv
+
+# CSV files
+/model/data/raw/
