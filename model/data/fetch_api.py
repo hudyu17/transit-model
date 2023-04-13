@@ -33,10 +33,17 @@ def fetch_api_data(input):
 
 
 if __name__ == "__main__":
-    cleveland_income = ('https://data.census.gov/api/access/data/table?g=860XX00US44104&id=ACSST5Y2011.S1901', 'cleveland-income-2011.json')
+    # cleveland_income = ('https://data.census.gov/api/access/data/table?g=860XX00US44104&id=ACSST5Y2011.S1901', 'cleveland-income-2011.json')
     # cleveland_population = ('https://data.census.gov/api/access/data/table?g=860XX00US44104&id=ACSDP5Y2017.DP05', 'cleveland-pop-2017.json')
     # cleveland_population = ('https://data.census.gov/api/access/data/table?g=860XX00US44112&id=ACSDP5Y2015.DP05', 'cleveland-pop-2015.json')
     # cleveland_population = ('https://data.census.gov/api/access/data/table?g=860XX00US44112&id=ACSST5Y2021.S0101', 'cleveland-pop-new-2021.json')
     # houston_population = ('https://data.census.gov/api/access/data/table?g=860XX00US77024&id=ACSST5Y2016.S0101', 'houston-pop-2016.json')
+    # cle_car = ('https://data.census.gov/api/access/data/table?g=860XX00US44112&id=ACSST5Y2016.S0802', 'cle-car-2016.json')
+    # hou_car = ('https://data.census.gov/api/access/data/table?g=860XX00US77024&id=ACSST5Y2016.S0802', 'hou-car-2016.json')
+    # cle_job = ('https://data.census.gov/api/access/data/table?id=ZBP2017.CB1700ZBP&g=860XX00US44103', 'cle-job-17.json')
+    # cle_house = ('https://data.census.gov/api/access/data/table?id=ACSDP5Y2015.DP02&g=860XX00US44112', 'cle-house-15.json')
+    # cle_house_new = ('https://data.census.gov/api/access/data/table?id=ACSST5Y2021.S2501&g=860XX00US44112', 'cle-house-new-21.json')
+    hou_house_new = ('https://data.census.gov/api/access/data/table?id=ACSST5Y2011.S2501&g=860XX00US77027', 'hou-house-new-11.json')
 
-    fetch_api_data(cleveland_income)
+
+    fetch_api_data(hou_house_new)
