@@ -14,6 +14,7 @@ class BRTData(object):
 
         self.income = self.pop = self.age = self.house_married = self.house_nonfam = self.house_m_single = self.house_f_single = self.car = self.biz = pd.DataFrame(index=self.years, columns=zipcodes)
         self.zipcodes = zipcodes
+        # TODO: self.resultsDir = 
 
     def fetch_api_data(self, url: str) -> dict:
         """
@@ -38,7 +39,13 @@ class BRTData(object):
         
         # return response.json()
 
+    def createResultsDir(self, location):
+        # take in location of desired directory
+        # create subdir with self.name so that other function save their CSVs there
+        return None
+
     def getIncome(self):
+        # TODO: make docstring
         for year in self.years:
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?g=860XX00US{zipcode}&id=ACSST5Y{year}.S1901'.format(zipcode = zipcode, year = year)
@@ -47,7 +54,19 @@ class BRTData(object):
                 df = pd.DataFrame.from_dict(res)
                 self.income.loc[year][zipcode] = df['response']['data'][1][161]
 
+        # save to CSV in self.subdir
+
         return self.income
+    
+    def getPopAge(self):
+        return None
+    
+    def getHousehold(self):
+        return None
+    
+    def getCarOwnership(self):
+        return None
+
     
 if __name__ == "__main__":
     name = input("Name of BRT System: ")
