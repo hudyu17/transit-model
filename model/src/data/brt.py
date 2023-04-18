@@ -1,7 +1,3 @@
-# if __name__ == "__main__":
-# take user input for year, select brt system
-# throw data into somewhere?
-
 import requests
 import json
 import pandas as pd
@@ -62,12 +58,19 @@ class BRTData(object):
         except json.JSONDecodeError as e:
             raise ValueError("API response is not in valid JSON format") from e
         
-    def load_existing_data(self):
-        # if raw data exists, you can re-instantiate an instance
-        # then works with other classes e.g. visualization object
+    def load_existing_data(self) -> None:
+        """
+        Load existing data from CSV files in the results location directory and 
+        assign the data to object properties in the current BRTData object.
+        """
+        for filename in os.listdir(self.resultsLocation):
+            if filename.endswith(".csv"):
+                print(filename)
+                csv_path = os.path.join(self.resultsLocation, filename)
+                csv_data = pd.read_csv(csv_path)
+                setattr(self, os.path.splitext(filename)[0], csv_data)
 
-        # make sure zipcodes line up with existing csvs, don't break but only fill as appropriate
-        return None
+        # Note: No checking of zipcode consistency
     
     def get_data(self, data):
         """
@@ -88,15 +91,12 @@ class BRTData(object):
     # DATA RETRIEVAL FUNCTIONS
     # --------------------------------------------
 
-    def save_income(self):
+    def save_income(self) -> None:
         """
         Fetches median household annual income for the zip codes and years stored in the BRTData object.
 
         The resulting 'income' DataFrame is saved as a CSV file in the 'data/raw/{resultsLocation}' 
         directory of the BRTData object.
-
-        Returns:
-            None
         """
         for year in self.years:
             for zipcode in self.zipcodes:
@@ -110,15 +110,12 @@ class BRTData(object):
         path = os.path.join(self.resultsLocation, "income.csv")
         self.income.to_csv(path, index=True)
     
-    def save_pop_age(self):
+    def save_pop_age(self) -> None:
         """
         Fetches population and median age for the zip codes and years stored in the BRTData object.
 
         The resulting 'age' and 'pop' DataFrames are saved as CSV files in the 'data/raw/{resultsLocation}' 
         directory of the BRTData object.
-
-        Returns:
-            None
         """
         for year in self.years:
             if year in ['2013', '2014', '2015', '2016']:
@@ -144,16 +141,13 @@ class BRTData(object):
         self.age.to_csv(age_path, index=True)
         self.pop.to_csv(pop_path, index=True)
     
-    def save_household(self):
+    def save_household(self) -> None:
         """
         Fetches household type (e.g. Married, Non-Family) for the zip codes and years stored in the 
         BRTData object.
 
         The resulting 'house' DataFrame is saved as a CSV file in the 'data/raw/{resultsLocation}' 
         directory of the BRTData object.
-
-        Returns:
-            None
         """
         house_index = {'Married': 0, 'Nonfamily': 0, 'SingleMale': 0, 'SingleFemale': 0}
 
@@ -191,16 +185,13 @@ class BRTData(object):
         self.house_m_single.to_csv(m_single_path, index=True)
         self.house_f_single.to_csv(f_single_path, index=True)
     
-    def save_car_ownership(self):
+    def save_car_ownership(self) -> None:
         """
         Fetches the percentage of households that commute using public transit and have no access to a
         car for the zip codes and years stored in the BRTData object.
 
         The resulting 'car' DataFrame is saved as a CSV file in the 'data/raw/{resultsLocation}' 
         directory of the BRTData object.
-
-        Returns:
-            None
         """
         for year in self.years:
             for zipcode in self.zipcodes:
@@ -215,16 +206,13 @@ class BRTData(object):
         path = os.path.join(self.resultsLocation, "car.csv")
         self.car.to_csv(path, index=True)
     
-    def save_num_businesses(self):
+    def save_num_businesses(self) -> None:
         """
         Fetches the number of business establishments for the zip codes and years stored in 
         the BRTData object.
 
         The resulting 'biz' DataFrame is saved as a CSV file in the 'data/raw/{resultsLocation}' 
         directory of the BRTData object.
-
-        Returns:
-            None
         """
         for year in self.years[:6]:
             for zipcode in self.zipcodes:
@@ -246,11 +234,9 @@ if __name__ == "__main__":
 #     brt_data.save_num_businesses()
 #     brt_data.save_car_ownership()
 #     brt_data.save_household()
-#     data = brt_data.get_data('lol')
-#     print(data)
-#     income_data = brt_data.getIncome()
-#     print(income_data)
+    print(brt_data.get_data('age'))
+    print(brt_data.get_data('income'))
+    print(brt_data.get_data('house_f_single'))
 
 # TODO: 
-# 1. create load existing data function - don't want to have to re-call data when you can just re-instantiate
 # 4. not in this file but manual finding zipcodes
