@@ -2,9 +2,11 @@ import requests
 import json
 import pandas as pd
 import os
+import time
 
 class BRTData(object):
     def __init__(self, location, zipcodes: list[str]) -> None:
+        self.name = location
         self.years = list(map(str, [x for x in range(2013, 2021)]))
         self.zipcodes = zipcodes
 
@@ -47,12 +49,14 @@ class BRTData(object):
         Returns:
         dict: A dictionary containing the JSON response from the API endpoint.
         """
+        # print(url) # for debugging
+
         # make the API request
         response = requests.get(url)
 
         # check if response is empty or not in JSON format
         if not response.content:
-            raise ValueError("API response is empty")
+            return None
         try:
             return response.json()
         except json.JSONDecodeError as e:
@@ -102,9 +106,13 @@ class BRTData(object):
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?g=860XX00US{zipcode}&id=ACSST5Y{year}.S1901'.format(zipcode = zipcode, year = year)
                 res = self.fetch_api_data(url)
+                if not res:
+                    continue
 
                 df = pd.DataFrame.from_dict(res)
                 self.income.loc[year][zipcode] = df['response']['data'][1][161]
+            
+            time.sleep(5)
 
         # Save to CSV
         path = os.path.join(self.resultsLocation, "income.csv")
@@ -128,12 +136,16 @@ class BRTData(object):
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?g=860XX00US{zipcode}&id=ACSST5Y{year}.S0101'.format(zipcode = zipcode, year = year)
                 res = self.fetch_api_data(url)
+                if not res:
+                    continue
 
                 df = pd.DataFrame.from_dict(res)
 
                 self.age.loc[year][zipcode] = df['response']['data'][1][age_index]
                 self.pop.loc[year][zipcode] = df['response']['data'][1][pop_index]
-        
+            
+            time.sleep(5)
+
         # Save to CSV
         age_path = os.path.join(self.resultsLocation, "age.csv")
         pop_path = os.path.join(self.resultsLocation, "pop.csv")
@@ -166,6 +178,8 @@ class BRTData(object):
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?id=ACSST5Y{year}.S2501&g=860XX00US{zipcode}'.format(zipcode = zipcode, year = year)
                 res = self.fetch_api_data(url)
+                if not res:
+                    continue
 
                 df = pd.DataFrame.from_dict(res)
 
@@ -173,6 +187,8 @@ class BRTData(object):
                 self.house_nonfam.loc[year][zipcode] = df['response']['data'][1][house_index['Nonfamily']]
                 self.house_m_single.loc[year][zipcode] = df['response']['data'][1][house_index['SingleMale']]
                 self.house_f_single.loc[year][zipcode] = df['response']['data'][1][house_index['SingleFemale']]
+            
+            time.sleep(5)
 
         # Save to CSV
         married_path = os.path.join(self.resultsLocation, "house_married.csv")
@@ -197,10 +213,14 @@ class BRTData(object):
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?g=860XX00US{zipcode}&id=ACSST5Y{year}.S0802'.format(zipcode = zipcode, year = year)
                 res = self.fetch_api_data(url)
+                if not res:
+                    continue
 
                 df = pd.DataFrame.from_dict(res)
 
                 self.car.loc[year][zipcode] = df['response']['data'][1][114]
+            
+            time.sleep(5)
 
         # Save to CSV
         path = os.path.join(self.resultsLocation, "car.csv")
@@ -218,11 +238,15 @@ class BRTData(object):
             for zipcode in self.zipcodes:
                 url = 'https://data.census.gov/api/access/data/table?id=ZBP{year}.CB{year_short}00ZBP&g=860XX00US{zipcode}'.format(zipcode = zipcode, year = year, year_short = year[2:])
                 res = self.fetch_api_data(url)
+                if not res:
+                    continue
 
                 df = pd.DataFrame.from_dict(res)
 
                 self.biz.loc[year][zipcode] = df['response']['data'][1][15]
-    
+            
+            time.sleep(5)
+            
         # Save to CSV
         path = os.path.join(self.resultsLocation, "biz.csv")
         self.biz.to_csv(path, index=True)
