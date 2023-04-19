@@ -1,8 +1,9 @@
 # Virtual Environment
 .venv
 
-# CSV files
-model/data/raw
+# Test files
+model/data/raw/exploratory_analysis
+model/data/raw/test
 
 # env files
 .env
