@@ -1,12 +1,12 @@
-﻿State,Name,NTDID,Legacy NTDID,Org Type,Reporter Type,Urbanized Area,UZA Population,Mode,TOS,VOMS,,Vehicles Available for Maximum Service,,Service Supplied (in Thousands),,,,,,,,,,Service Consumed (in Thousands),,,
-,,,,,,,,,,,,,,Annual Scheduled Vehicle Revenue Miles,,Annual Vehicle Miles,,Annual Vehicle Revenue Miles,,Annual Vehicle Hours,,Annual Vehicle Revenue Hours,,Unlinked Passenger Trips,,Passenger Miles,
-CA,Los Angeles County Metropolitan Transportation Authority dba: Metro(LACMTA),90154,9154,Authority,Full Reporter: Operating,"Los Angeles-Long Beach-Anaheim, CA","12,150,996",RB,DO,33.0,,44.0,,"2,029.9",,"2,107.3",,"2,017.5",,136.9,,131.0,,"9,012.0",,"56,807.0",
-CO,Transfort,80011,8011,City,Full Reporter: Operating,"Fort Collins, CO","264,465",RB,DO,7.0,,7.0,,196.0,,197.8,,186.4,,20.0,,19.5,,568.4,,"1,471.5",
-FL,Central Florida Regional Transportation Authority(LYNX),40035,4035,Authority,Full Reporter: Operating,"Orlando, FL","1,510,516",RB,DO,9.0,,9.0,,175.9,,193.4,,175.8,,33.7,,32.1,,"1,043.3",,976.6,
-MA,Massachusetts Bay Transportation Authority(MBTA),10003,1003,Authority,Full Reporter: Operating,"Boston, MA-NH-RI","4,181,019",RB,DO,30.0,,53.0,,"1,039.8",,"1,095.4",,"1,034.6",,117.9,,113.0,,"9,080.9",,"15,170.4",
-MI,Interurban Transit Partnership(The Rapid),50033,5033,Authority,Full Reporter: Operating,"Grand Rapids, MI","569,935",RB,DO,8.0,,10.0,,40.1,,40.1,,37.5,,2.9,,2.8,,74.6,,300.7,
-MO,Kansas City Area Transportation Authority(KCATA),70005,7005,Authority,Full Reporter: Operating,"Kansas City, MO-KS","1,519,417",RB,DO,11.0,,15.0,,513.4,,550.6,,512.3,,46.5,,44.4,,"1,545.4",,"4,163.4",
-NV,Regional Transportation Commission of Southern Nevada(RTC),90045,9045,Authority,Full Reporter: Operating,"Las Vegas-Henderson, NV","1,886,011",RB,PT,18.0,,140.0,,"1,011.3",,"1,151.2",,999.9,,90.4,,85.9,,"4,132.4",,"16,942.7",
-NY,MTA New York City Transit(NYCT),20008,2008,Subsidiary,Full Reporter: Operating,"New York-Newark, NY-NJ-CT","18,351,295",RB,DO,74.0,,91.0,,"1,600.0",,"1,789.0",,"1,736.2",,295.7,,287.0,,"19,953.3",,"37,727.7",
-OH,The Greater Cleveland Regional Transit Authority(GCRTA),50015,5015,Authority,Full Reporter: Operating,"Cleveland, OH","1,780,673",RB,DO,16.0,,21.0,,651.3,,659.8,,641.1,,71.0,,68.4,,"5,084.5",,"13,277.3",
-OR,Lane Transit District(LTD),00007,0007,Authority,Full Reporter: Operating,"Eugene, OR","247,421",RB,DO,8.0,,11.0,,424.5,,434.8,,427.6,,36.1,,35.6,,"2,806.8",,"7,835.7",
+﻿State,Name,NTDID,Legacy NTDID,Org Type,Reporter Type,Urbanized Area,UZA Population,Mode,TOS,VOMS,,Vehicles Available for Maximum Service,,Annual Scheduled Vehicle Revenue Miles,,Annual Vehicle Miles,,Annual Vehicle Revenue Miles,,Annual Vehicle Hours,,Annual Vehicle Revenue Hours,,Unlinked Passenger Trips,,Passenger Miles
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+CA,Los Angeles County Metropolitan Transportation Authority dba: Metro(LACMTA),90154,9154,Authority,Full Reporter: Operating,"Los Angeles-Long Beach-Anaheim, CA","12,150,996",RB,DO,33,,44,,"2,029.90",,"2,107.30",,"2,017.50",,136.9,,131,,"9,012.00",,"56,807.00"
+CO,Transfort,80011,8011,City,Full Reporter: Operating,"Fort Collins, CO","264,465",RB,DO,7,,7,,196,,197.8,,186.4,,20,,19.5,,568.4,,"1,471.50"
+FL,Central Florida Regional Transportation Authority(LYNX),40035,4035,Authority,Full Reporter: Operating,"Orlando, FL","1,510,516",RB,DO,9,,9,,175.9,,193.4,,175.8,,33.7,,32.1,,"1,043.30",,976.6
+MA,Massachusetts Bay Transportation Authority(MBTA),10003,1003,Authority,Full Reporter: Operating,"Boston, MA-NH-RI","4,181,019",RB,DO,30,,53,,"1,039.80",,"1,095.40",,"1,034.60",,117.9,,113,,"9,080.90",,"15,170.40"
+MI,Interurban Transit Partnership(The Rapid),50033,5033,Authority,Full Reporter: Operating,"Grand Rapids, MI","569,935",RB,DO,8,,10,,40.1,,40.1,,37.5,,2.9,,2.8,,74.6,,300.7
+MO,Kansas City Area Transportation Authority(KCATA),70005,7005,Authority,Full Reporter: Operating,"Kansas City, MO-KS","1,519,417",RB,DO,11,,15,,513.4,,550.6,,512.3,,46.5,,44.4,,"1,545.40",,"4,163.40"
+NV,Regional Transportation Commission of Southern Nevada(RTC),90045,9045,Authority,Full Reporter: Operating,"Las Vegas-Henderson, NV","1,886,011",RB,PT,18,,140,,"1,011.30",,"1,151.20",,999.9,,90.4,,85.9,,"4,132.40",,"16,942.70"
+NY,MTA New York City Transit(NYCT),20008,2008,Subsidiary,Full Reporter: Operating,"New York-Newark, NY-NJ-CT","18,351,295",RB,DO,74,,91,,"1,600.00",,"1,789.00",,"1,736.20",,295.7,,287,,"19,953.30",,"37,727.70"
+OH,The Greater Cleveland Regional Transit Authority(GCRTA),50015,5015,Authority,Full Reporter: Operating,"Cleveland, OH","1,780,673",RB,DO,16,,21,,651.3,,659.8,,641.1,,71,,68.4,,"5,084.50",,"13,277.30"
+OR,Lane Transit District(LTD),7,7,Authority,Full Reporter: Operating,"Eugene, OR","247,421",RB,DO,8,,11,,424.5,,434.8,,427.6,,36.1,,35.6,,"2,806.80",,"7,835.70"
