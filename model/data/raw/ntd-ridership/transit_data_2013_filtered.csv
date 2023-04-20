@@ -1,0 +1,10 @@
+State,Name,ID,Org Type,SSW,Urbanized Area,UZA Population,Mode,TOS,VOMS,Vehicles Available for Maximum Service,Unnamed: 11,Service Supplied (in Thousands),Unnamed: 13,Unnamed: 14,Unnamed: 15,Unnamed: 16,Unnamed: 17,Unnamed: 18,Unnamed: 19,Unnamed: 20,Unnamed: 21,Service Consumed (in Thousands),Unnamed: 23,Unnamed: 24,Unnamed: 25,Unnamed: 26,Unnamed: 27
+CA,Los Angeles County Metropolitan Transportation Authority dba: Metro(LACMTA),9154.0,Authority,N,"Los Angeles-Long Beach-Anaheim, CA",12150996.0,RB,DO,32.0,46.0,,1929.263,,2005.007,,1915.256,,123.512,,116.638,,9118.437,,57728.945,,,
+FL,Central Florida Regional Transportation Authority(LYNX),4035.0,Authority,N,"Orlando, FL",1510516.0,RB,DO,7.0,9.0,,140.221,,169.317,,140.216,,29.245,,26.812,,844.514,,615.836,,,
+MO,Kansas City Area Transportation Authority(KCATA),7005.0,Authority,N,"Kansas City, MO-KS",1519417.0,RB,DO,11.0,15.0,,513.425,,551.109,,512.874,,46.541,,44.395,,1591.117,,4311.927,,,
+NV,Regional Transportation Commission of Southern Nevada(RTC),9045.0,Authority,N,"Las Vegas-Henderson, NV",1886011.0,RB,PT,16.0,59.0,,810.604,,799.899,,712.392,,61.517,,57.906,,4377.576,,21912.925,,,
+NY,MTA New York City Transit(NYCT),2008.0,Subsidiary,N,"New York-Newark, NY-NJ-CT",18351295.0,RB,DO,74.0,90.0,,1412.44,,1554.704,,1518.371,,262.694,,256.568,,19861.653,,35593.196,,,
+OH,The Greater Cleveland Regional Transit Authority(GCRTA),5015.0,Authority,N,"Cleveland, OH",1780673.0,RB,DO,16.0,21.0,,654.749,,666.169,,648.031,,71.389,,69.28,,4854.519,,12837.586,,,
+OR,Lane Transit District(LTD),7.0,Authority,N,"Eugene, OR",247421.0,RB,DO,8.0,11.0,,422.327,,430.903,,423.727,,35.933,,35.502,,2707.309,,7840.004,,,
+,Bus Rapid Transit - Directly Operated,,,,,,RB,DO,148.0,192.0,,5.072425,,5.377209,,5.158475,,0.569314,,0.549195,,38.977549,,118.927494,,,
+,Bus Rapid Transit - Purchased Transportation,,,,,,RB,PT,16.0,59.0,,0.810604,,0.799899,,0.712392,,0.061517,,0.057906,,4.377576,,21.912925,,,
