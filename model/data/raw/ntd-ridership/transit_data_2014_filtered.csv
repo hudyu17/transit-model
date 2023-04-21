@@ -1,5 +1,4 @@
 ﻿State,Name,NTDID,Legacy NTDID,Org Type,Reporter Type,Urbanized Area,UZA Population,Mode,TOS,VOMS,,Vehicles Available for Maximum Service,,Annual Scheduled Vehicle Revenue Miles,,Annual Vehicle Miles,,Annual Vehicle Revenue Miles,,Annual Vehicle Hours,,Annual Vehicle Revenue Hours,,Unlinked Passenger Trips,,Passenger Miles
-,,,,,,,,,,,,,,,,,,,,,,,,,,
 CA,Los Angeles County Metropolitan Transportation Authority dba: Metro(LACMTA),90154,9154,Authority,Full Reporter: Operating,"Los Angeles-Long Beach-Anaheim, CA","12,150,996",RB,DO,33,,44,,"2,029.90",,"2,107.30",,"2,017.50",,136.9,,131,,"9,012.00",,"56,807.00"
 CO,Transfort,80011,8011,City,Full Reporter: Operating,"Fort Collins, CO","264,465",RB,DO,7,,7,,196,,197.8,,186.4,,20,,19.5,,568.4,,"1,471.50"
 FL,Central Florida Regional Transportation Authority(LYNX),40035,4035,Authority,Full Reporter: Operating,"Orlando, FL","1,510,516",RB,DO,9,,9,,175.9,,193.4,,175.8,,33.7,,32.1,,"1,043.30",,976.6

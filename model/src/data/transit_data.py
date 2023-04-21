@@ -3,9 +3,11 @@ import json
 import pandas as pd
 import os
 import time
+from io import BytesIO
+from zipfile import ZipFile
 
 class BRTData(object):
-    def __init__(self, location, zipcodes: list[str]) -> None:
+    def __init__(self, location, zipcodes: list[str] = []) -> None:
         self.name = location
         self.years = list(map(str, [x for x in range(2013, 2021)]))
         self.zipcodes = zipcodes
@@ -71,7 +73,8 @@ class BRTData(object):
             if filename.endswith(".csv"):
                 print(filename)
                 csv_path = os.path.join(self.resultsLocation, filename)
-                csv_data = pd.read_csv(csv_path)
+                csv_data = pd.read_csv(csv_path, index_col=0)
+                csv_data = csv_data.rename_axis('year')
                 setattr(self, os.path.splitext(filename)[0], csv_data)
 
         # Note: No checking of zipcode consistency
@@ -251,16 +254,98 @@ class BRTData(object):
         path = os.path.join(self.resultsLocation, "biz.csv")
         self.biz.to_csv(path, index=True)
     
-if __name__ == "__main__":
-    name = input("Name of BRT System (location): ")
-    brt_data = BRTData(name, ['44112', '44104'])
-    brt_data.load_existing_data()
-#     brt_data.save_num_businesses()
-#     brt_data.save_car_ownership()
-#     brt_data.save_household()
-    print(brt_data.get_data('age'))
-    print(brt_data.get_data('income'))
-    print(brt_data.get_data('house_f_single'))
 
-# TODO: 
-# 4. not in this file but manual finding zipcodes
+class NTDData(object):
+    def __init__(self) -> None:
+        # A single NTDData object can handle *all* the ntd-data
+
+        # Locating ntd-ridership directory with raw data
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        self.data_dir = os.path.abspath(os.path.join(script_dir, "../../data/raw/ntd-ridership"))
+
+    # --------------------------------------------
+    # HELPER FUNCTIONS
+    # --------------------------------------------
+
+    def fetch_zip_data(self, year, file_path):
+        # Edge cases
+        if year == 2017:
+            url = requests.get('https://www.apta.com/wp-content/uploads/Resources/resources/statistics/Documents/NTD_Data/2017-National-Transit-Database.zip')
+        elif year == 2015:
+            url = requests.get('https://www.apta.com/wp-content/uploads/2015-NTD-Tables-APTA.zip')
+        else:
+            url = requests.get(f'https://www.apta.com/wp-content/uploads/{year}-National-Transit-Database.zip')
+
+        zipfile = ZipFile(BytesIO(url.content))
+
+        with zipfile.open(file_path) as f:
+            if year == 2013:
+                df = pd.read_excel(f, sheet_name="Op_Stats_Service", skiprows=[0])
+            else:
+                df = pd.read_excel(f, sheet_name="Metrics")
+
+        # Filter the DataFrame to rows where column J == 'RB'
+        df_filtered = df[df["Mode"] == "RB"]
+
+        # Save the filtered data to a new CSV file
+        output_file = os.path.join(self.data_dir, f'transit_data_{year}_filtered.csv')
+        # output_file = os.path.join("../../data/raw/ntd-ridership", f'transit_data_{year}_filtered.csv')
+        df_filtered.to_csv(output_file, index=False)
+
+    def load_existing_data(self) -> None:
+        """
+        Load existing data from CSV files in the results location directory and 
+        assign the data to object properties in the current NTDData object.
+        """
+        for filename in os.listdir(self.data_dir):
+            if filename.endswith(".csv"):
+                print(filename)
+                csv_path = os.path.join(self.data_dir, filename)
+                csv_data = pd.read_csv(csv_path, index_col=0)
+                setattr(self, os.path.splitext(filename)[0], csv_data)
+
+    def get_data(self, data):
+        """
+        Returns a property of an NTDData object.
+
+        Parameters:
+            data (str): The name of the property to return.
+
+        Returns:
+            The value of the specified property of the BRData object.
+        """
+        try:
+            return getattr(self, data)
+        except AttributeError:
+            raise ValueError(f"'{NTDData.__name__}' object has no attribute '{data}'")
+
+    # --------------------------------------------
+    # DATA RETRIEVAL FUNCTIONS
+    # --------------------------------------------
+
+    def save_data(self):
+        # do the download like in data_retrieval_ntd.ipynb
+        years = [2013] + list(range(2015, 2021))
+        
+        file_paths = {
+            2013: '2013-Table-19-Transit-Operating-Stats.xls',
+            2014: '2014-Table-19-Transit-Operating-Stats.xls',
+            2015: 'Metrics.xlsm',
+            2016: '2016-NTD-Metrics_0.xlsx',
+            2017: 'Metrics_1.xlsm',
+            2018: 'Metrics_2.xlsx',
+            2019: '2019_Annual_Database_Files/Metrics_Static.xlsx',
+            2020: '2020_Annual_Database_Files/Metrics_Static.xlsx'
+        }
+
+        for year in years:
+            print(year)
+            self.fetch_zip_data(year, file_paths[year])
+
+
+if __name__ == "__main__":
+    ntd = NTDData()
+    ntd.save_data()
+    ntd.load_existing_data()
+    print(ntd.get_data('transit_data_2016_filtered'))

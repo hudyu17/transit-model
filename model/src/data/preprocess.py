@@ -18,3 +18,88 @@ Example usage:
     split_data(df)
 
 """
+import pandas as pd
+import matplotlib.pyplot as plt
+from transit_data import BRTData, NTDData
+import os
+
+# --------------------------------------------
+# HELPER FUNCTIONS
+# --------------------------------------------
+
+def make_average(df, name):
+    series_average = df.mean(axis=1)
+    series_average.rename(name, inplace=True)
+
+    return series_average
+
+def export_csv(df, name):
+    # TODO: need some editing
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = os.path.abspath(os.path.join(script_dir, "../.."))
+    data_dir = os.path.join(project_dir, "data/processed")
+    
+    name = brt_data.get_data('name')
+    processed_df.to_csv(os.path.join(data_dir, f'{name}.csv'), index=True)
+
+# --------------------------------------------
+# DATA PROCESSING FUNCTIONS
+# --------------------------------------------
+
+def process_brt_data(brt_data: BRTData):
+    metrics = ['income', 'pop', 'age', 'house_married', 'house_nonfam', 'house_m_single', 'house_f_single', 'car', 'biz']
+    series_list = []
+
+    for metric in metrics:
+        df = brt_data.get_data(metric)
+        series_average = make_average(df, metric)
+        series_list.append(series_average)
+
+    return pd.concat(series_list, axis=1)
+
+def process_ntd_data(ntd_data: NTDData, system: str):
+    years = list(range(2013, 2021))
+    curr_name = system.replace("_", " ")
+    # some res df to concat to with years as index
+
+    cols = ['Unlinked Passenger Trips', 'UZA Population', 'Mode VOMS', 'VOMS', 'Annual Vehicle Revenue Miles']
+
+    for year in years:
+        # i only get one row tho lol
+
+        df_raw = ntd_data.get_data(f'transit_data_{year}_filtered')
+        
+        if year in (2013, 2014):
+            filtered_df = df_raw[df_raw["Urbanized Area"].str.contains(curr_name, na=False, case=False)]
+        else: 
+            filtered_df = df_raw[df_raw["City"].str.contains(curr_name, na=False, case=False)]
+        
+        filtered_df.loc[:, filtered_df.columns.isin(cols)] # add this to the res df with a new year in the index
+
+
+    # return the dataframe for a specific system
+    pass
+
+def process_data(brt_data: BRTData, ntd_data: NTDData, system: str):
+    brt_df = process_brt_data(brt_data)
+    ntd_df = process_ntd_data(ntd_data, system)
+
+    # merge the dfs
+    
+    # call exportcsv
+
+    # still missing the ridership concat?
+
+def main():
+    locations = ['cleveland', 'houston', 'kansas', 'richmond', 'indianapolis', 'eugene', 'albuquerque', 'aspen_westcliffe_glenwood_springs', 'fort_collins', 'hartford', 'grand_rapids', 'orlando', 'boston', 'los_angeles']
+
+    ntd = NTDData()
+    ntd.load_existing_data()
+    
+    for system in locations:
+        brt = BRTData(system)
+        brt.load_existing_data()
+        process_data(brt, ntd, system)
+
+if __name__ == "__main__":
+    main()
