@@ -19,6 +19,7 @@ Example usage:
 
 """
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from transit_data import BRTData, NTDData
 import os
@@ -39,8 +40,7 @@ def export_csv(df, name):
     project_dir = os.path.abspath(os.path.join(script_dir, "../.."))
     data_dir = os.path.join(project_dir, "data/processed")
     
-    name = brt_data.get_data('name')
-    processed_df.to_csv(os.path.join(data_dir, f'{name}.csv'), index=True)
+    df.to_csv(os.path.join(data_dir, f'{name}.csv'), index=True)
 
 # --------------------------------------------
 # DATA PROCESSING FUNCTIONS
@@ -60,9 +60,8 @@ def process_brt_data(brt_data: BRTData):
 def process_ntd_data(ntd_data: NTDData, system: str):
     years = list(range(2013, 2021))
     curr_name = system.replace("_", " ")
-    # some res df to concat to with years as index
-
-    cols = ['Unlinked Passenger Trips', 'UZA Population', 'Mode VOMS', 'VOMS', 'Annual Vehicle Revenue Miles']
+    cols = ['Unlinked Passenger Trips', 'Primary UZA\n Population', 'UZA Population', 'Mode VOMS', 'VOMS', 'Annual Vehicle Revenue Miles', 'Vehicle Revenue Miles']
+    res_df = pd.DataFrame(columns = cols, index = years)
 
     for year in years:
         # i only get one row tho lol
@@ -74,25 +73,49 @@ def process_ntd_data(ntd_data: NTDData, system: str):
         else: 
             filtered_df = df_raw[df_raw["City"].str.contains(curr_name, na=False, case=False)]
         
-        filtered_df.loc[:, filtered_df.columns.isin(cols)] # add this to the res df with a new year in the index
+        df_year = filtered_df.loc[:, filtered_df.columns.isin(cols)] 
 
+        # Populate res_df
+        for col in cols:
+            try:
+                res_df.at[year, col] = df_year[col][0]
+            except:
+                res_df.at[year, col] = np.NaN
+
+    res_df.rename(columns={'Primary UZA\n Population': 'Primary UZA Population'}, inplace=True)
+
+    # merge duplicate cols
+    res_df['UZA Population'].update(res_df.pop('Primary UZA Population'))
+    res_df['VOMS'].update(res_df.pop('Mode VOMS'))
+    res_df['Vehicle Revenue Miles'].update(res_df.pop('Annual Vehicle Revenue Miles'))
+
+    # lowercase and space replacement
+    res_df.columns= res_df.columns.str.lower()
+    res_df.columns = res_df.columns.str.replace(' ', '_')
+
+    # need to cleeeaAAAAN
 
     # return the dataframe for a specific system
-    pass
+    return res_df
 
 def process_data(brt_data: BRTData, ntd_data: NTDData, system: str):
     brt_df = process_brt_data(brt_data)
     ntd_df = process_ntd_data(ntd_data, system)
 
     # merge the dfs
-    
+    merged_df = pd.concat([brt_df, ntd_df], axis=1)
+    print(merged_df)
+
+    # TODO helper function for cleaning/merging cols
+
     # call exportcsv
+    export_csv(merged_df, system)
 
     # still missing the ridership concat?
 
 def main():
-    locations = ['cleveland', 'houston', 'kansas', 'richmond', 'indianapolis', 'eugene', 'albuquerque', 'aspen_westcliffe_glenwood_springs', 'fort_collins', 'hartford', 'grand_rapids', 'orlando', 'boston', 'los_angeles']
-
+    # locations = ['cleveland', 'houston', 'kansas', 'richmond', 'indianapolis', 'eugene', 'albuquerque', 'aspen_westcliffe_glenwood_springs', 'fort_collins', 'hartford', 'grand_rapids', 'orlando', 'boston', 'los_angeles']
+    locations = ['cleveland', 'kansas']
     ntd = NTDData()
     ntd.load_existing_data()
     

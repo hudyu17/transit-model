@@ -14,7 +14,7 @@ This module utilises the BRTData and NTDData classes and their respective functi
 import os
 from transit_data import BRTData, NTDData
 
-def save_brt_data(brt_data):
+def save_brt_data(brt_data: BRTData):
     print('Data retrieval starting for:', brt_data.name)
 
     brt_data.save_income()
