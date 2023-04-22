@@ -35,7 +35,6 @@ def make_average(df, name):
     return series_average
 
 def export_csv(df, name):
-    # TODO: need some editing
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_dir = os.path.abspath(os.path.join(script_dir, "../.."))
     data_dir = os.path.join(project_dir, "data/processed")
@@ -52,10 +51,17 @@ def process_brt_data(brt_data: BRTData):
 
     for metric in metrics:
         df = brt_data.get_data(metric)
+        
+        # Cleaning
+        df.dropna(axis=1, how='all', inplace=True) # drop cols with all NaN's
+        df = df.loc[:, ~(df < 0).any(axis=0)] # drop cols that feature any negative
+        df = df.loc[:, df.eq(0).mean() <= 0.25] # only keep cols with 25% or fewer values that are still 0
+
         series_average = make_average(df, metric)
         series_list.append(series_average)
 
     return pd.concat(series_list, axis=1)
+
 
 def process_ntd_data(ntd_data: NTDData, system: str):
     years = list(range(2013, 2021))
@@ -64,14 +70,14 @@ def process_ntd_data(ntd_data: NTDData, system: str):
     res_df = pd.DataFrame(columns = cols, index = years)
 
     for year in years:
-        # i only get one row tho lol
-
         df_raw = ntd_data.get_data(f'transit_data_{year}_filtered')
         
         if year in (2013, 2014):
             filtered_df = df_raw[df_raw["Urbanized Area"].str.contains(curr_name, na=False, case=False)]
         else: 
             filtered_df = df_raw[df_raw["City"].str.contains(curr_name, na=False, case=False)]
+
+        # TODO: doesn't grab roaring fork properly
         
         df_year = filtered_df.loc[:, filtered_df.columns.isin(cols)] 
 
@@ -84,16 +90,27 @@ def process_ntd_data(ntd_data: NTDData, system: str):
 
     res_df.rename(columns={'Primary UZA\n Population': 'Primary UZA Population'}, inplace=True)
 
-    # merge duplicate cols
+    # Merge duplicate cols
     res_df['UZA Population'].update(res_df.pop('Primary UZA Population'))
     res_df['VOMS'].update(res_df.pop('Mode VOMS'))
     res_df['Vehicle Revenue Miles'].update(res_df.pop('Annual Vehicle Revenue Miles'))
 
-    # lowercase and space replacement
+    # Column name cleaning - lowercase and space replacement
     res_df.columns= res_df.columns.str.lower()
     res_df.columns = res_df.columns.str.replace(' ', '_')
 
-    # need to cleeeaAAAAN
+    # Cleaning values - removing commas from float fields that are mis-cast
+    res_df.replace(',','', regex=True, inplace=True)
+    res_df = res_df.astype({'unlinked_passenger_trips':'float'})
+    res_df = res_df.astype({'uza_population':'float'})
+    res_df = res_df.astype({'vehicle_revenue_miles':'float'})
+
+    # Adjusting values off by 3 orders of magnitude somehow
+    mean = res_df.mean()
+    std = res_df.std()
+
+    res_df.loc[abs(res_df['unlinked_passenger_trips'] - mean.unlinked_passenger_trips) > std.unlinked_passenger_trips, 'unlinked_passenger_trips'] *= 1000
+    res_df.loc[abs(res_df['vehicle_revenue_miles'] - mean.vehicle_revenue_miles) > std.vehicle_revenue_miles, 'vehicle_revenue_miles'] *= 1000
 
     # return the dataframe for a specific system
     return res_df
@@ -102,20 +119,17 @@ def process_data(brt_data: BRTData, ntd_data: NTDData, system: str):
     brt_df = process_brt_data(brt_data)
     ntd_df = process_ntd_data(ntd_data, system)
 
-    # merge the dfs
+    # Merge the dfs
     merged_df = pd.concat([brt_df, ntd_df], axis=1)
+    merged_df = merged_df.round(2)
     print(merged_df)
 
-    # TODO helper function for cleaning/merging cols
-
-    # call exportcsv
+    # Export the df to a CSV
     export_csv(merged_df, system)
-
-    # still missing the ridership concat?
 
 def main():
     # locations = ['cleveland', 'houston', 'kansas', 'richmond', 'indianapolis', 'eugene', 'albuquerque', 'aspen_westcliffe_glenwood_springs', 'fort_collins', 'hartford', 'grand_rapids', 'orlando', 'boston', 'los_angeles']
-    locations = ['cleveland', 'kansas']
+    locations = ['boston', 'kansas', 'aspen_westcliffe_glenwood_springs', 'richmond', 'eugene']
     ntd = NTDData()
     ntd.load_existing_data()
     
