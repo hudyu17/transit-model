@@ -46,10 +46,10 @@ class BRTData(object):
         Fetches data from an API endpoint and returns the response in JSON format.
 
         Parameters:
-        url (str): The URL of the API endpoint to fetch data from.
+            url (str): The URL of the API endpoint to fetch data from.
 
         Returns:
-        dict: A dictionary containing the JSON response from the API endpoint.
+            dict: A dictionary containing the JSON response from the API endpoint.
         """
         # print(url) # for debugging
 
