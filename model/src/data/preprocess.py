@@ -161,7 +161,7 @@ def process_data(brt_data: BRTData, ntd_data: NTDData, system: str) -> None:
     # Merge the dfs
     merged_df = pd.concat([brt_df, ntd_df], axis=1)
     merged_df = merged_df.round(2)
-    print(merged_df)
+    merged_df.insert(0, 'system', system)
 
     # Export the df to a CSV
     export_csv(merged_df, system)

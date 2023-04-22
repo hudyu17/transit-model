@@ -36,6 +36,7 @@ class BRTData(object):
             os.makedirs(loc_dir)
 
         self.resultsLocation = loc_dir
+        self.processed = None
 
     # --------------------------------------------
     # HELPER FUNCTIONS
@@ -78,6 +79,20 @@ class BRTData(object):
                 setattr(self, os.path.splitext(filename)[0], csv_data)
 
         # Note: No checking of zipcode consistency
+
+    def load_processed_data(self) -> None:
+        """
+        Load processed data from the relevant CSV file for this system.
+        """
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # Navigate two levels up to the project directory
+        project_dir = os.path.abspath(os.path.join(script_dir, "../.."))
+        # Define the paths to the data directories
+        csv_path = os.path.join(project_dir, f"data/processed/{self.name}.csv")
+
+        csv_data = pd.read_csv(csv_path, index_col=0)
+
+        setattr(self, 'processed', csv_data)
     
     def get_data(self, data):
         """
