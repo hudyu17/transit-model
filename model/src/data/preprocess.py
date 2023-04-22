@@ -94,6 +94,8 @@ def process_ntd_data(ntd_data: NTDData, system: str) -> pd.DataFrame:
         df_raw = ntd_data.get_data(f'transit_data_{year}_filtered')
         
         if year == 2013:
+            df_raw = df_raw.fillna(0)
+            df_raw['ID'] = df_raw['ID'].astype(int).astype(str)
             filtered_df = df_raw[df_raw["ID"].astype(str) == ids[system]]
         elif year == 2014:
             filtered_df = df_raw[df_raw["Legacy NTDID"].astype(str) == ids[system]]
@@ -130,7 +132,12 @@ def process_ntd_data(ntd_data: NTDData, system: str) -> pd.DataFrame:
     mean = res_df.mean()
     std = res_df.std()
 
-    if system not in ('aspen_westcliffe_glenwood_springs', 'hartford', 'richmond'):
+    # Handling edge cases
+    if system in ('cleveland', 'orlando'):
+        res_df.loc[(abs(mean.unlinked_passenger_trips - res_df['unlinked_passenger_trips']) > std.unlinked_passenger_trips) & (res_df.index < 2015), 'unlinked_passenger_trips'] *= 1000
+        res_df.loc[(abs(mean.vehicle_revenue_miles - res_df['vehicle_revenue_miles']) > std.vehicle_revenue_miles) & (res_df.index < 2015), 'vehicle_revenue_miles'] *= 1000
+
+    elif system not in ('aspen_westcliffe_glenwood_springs', 'hartford', 'richmond'):
         res_df.loc[abs(mean.unlinked_passenger_trips - res_df['unlinked_passenger_trips']) > std.unlinked_passenger_trips, 'unlinked_passenger_trips'] *= 1000
         res_df.loc[abs(mean.vehicle_revenue_miles - res_df['vehicle_revenue_miles']) > std.vehicle_revenue_miles, 'vehicle_revenue_miles'] *= 1000
 
